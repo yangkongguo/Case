@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="towaynet.dao.SigninTableDao">
+
+<insert id="save" parameterType="towaynet.entity.SigninTable" >
+	insert into signin(
+		signin_id ,
+	    signin_status,
+	    signin_engineer_id,
+	    workTask_id 
+	)values(
+		#{signin_id},
+	    #{signin_status},
+	    #{signin_engineer_id},
+	    #{workTask_id}
+	);
+</insert>
+<!-- status 0无状态的签到签退表  1为填写了签到的表  2为全部都填写了的表  -->
+<select id="signinTableList" resultType="towaynet.entity.SigninTable" parameterType="string">
+	select * from signin where signin_engineer_id=#{id} and signin_status &lt;2;
+</select>
+<select id="signinTableListAll" resultType="towaynet.entity.SigninTable" parameterType="string">
+	select * from signin where signin_status &lt;=2;
+</select>
+<select id="signinTableListAllLT2" resultType="towaynet.entity.SigninTable" parameterType="string">
+	select * from signin where signin_status &lt;=2;
+</select>
+<select id="signinTableListAllLT3" resultType="towaynet.entity.SigninTable" parameterType="string">
+	select * from signin where signin_status &lt;=2 and signin_engineer_id=#{id};
+</select>
+
+<select id="signinTabWhoFinsh" resultType="towaynet.entity.SigninTable" parameterType="string">
+	select * from signin where signin_status=2 and signin_engineer_id=#{id};
+</select>
+<!-- 通过sID获取到wtId -->
+<select id="findWrokTaskId" parameterType="string" resultType="string">
+	select workTask_id from signin where signin_id=#{signin_id};
+</select>
+<!-- 查看signin通过wid -->
+<select id="findSigninByWID" parameterType="string" resultType="towaynet.entity.SigninTable">
+	select * from signin where workTask_id=#{workTask_id};
+</select>
+<!-- update -->
+<update id="signinInUpdate" parameterType="map">
+ 	update signin set 
+ 		signin_status=#{status},
+ 		signin_start_time=#{start_time},
+ 		signin_map=#{map},
+ 		signin_in_image_path=#{path}
+ 	where signin_id=#{signin_id};
+</update>
+<update id="signinOutUpdate" parameterType="map">
+ 	update signin set 
+	 	signin_status=#{status},
+	 	signin_finsh_time=#{finsh_time} ,
+	 	signin_map=#{map},
+	 	signin_out_image_path=#{path}
+ 	where signin_id=#{signin_id};
+</update>
+</mapper> 

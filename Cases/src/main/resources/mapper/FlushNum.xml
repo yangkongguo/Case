@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="towaynet.dao.FlushNumDao">
+
+<select id="findFlushNum" resultType="towaynet.entity.FlushNum">
+	select * from flushNum where flushNum_id=1;
+</select>
+<!-- 更新 -->
+<update id="flushUpdate" parameterType="map">
+	 update flushNum set nowDate=#{nowDate},case_num=#{case_num},
+	 	flush_num=#{flush_num} where flushNum_id=1;
+</update>
+
+</mapper> 

@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insertere</title>
+<style type="text/css">
+</style>
+<link
+	href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+	rel="stylesheet">
+<link rel="stylesheet" href="css/framework7.ios.min.css">
+<link rel="stylesheet" href="css/framework7.ios.colors.min.css">
+<script type="text/javascript" src="scripts/jquery.min.js"></script>
+<script type="text/javascript" src="scripts/exif.js"></script>
+<script type="text/javascript" src="scripts/basevalue.js"></script>
+<script type="text/javascript" src="scripts/framework7.min.js"></script>
+<script type="text/javascript"
+	src="http://g.alicdn.com/dingding/open-develop/0.8.4/dingtalk.js"></script>
+<script type="text/javascript">
+$(function(){
+	var pic=document.getElementById("pic");
+	$("#pic").click(function(){
+		alert(123);
+	})
+	$("#pic").blur(function(){
+		alert(456);
+		console.log(456);
+	})
+	 window.onbeforeunload = onbeforeunload_handler;
+     window.onunload = onunload_handler;
+     function onbeforeunload_handler() {
+         var warning = "确认退出?";
+         return warning;
+     }
+     function onunload_handler() {
+         var warning = "谢谢光临";
+         alert(warning);
+     }     
+})
+function handleFiles(file){
+	 var fileSelect = document.getElementById("fileSelect"),
+     fileElem = document.getElementById("fileElem");
+
+ fileSelect.addEventListener("click", function (e) {
+   if (fileElem) {
+     fileElem.click();
+   }
+   e.preventDefault(); // prevent navigation to "#"
+ }, false);
+}
+/*
+function datePick(id,dayNum){
+	var today = new Date();
+	var myApp = new Framework7();
+	var today = new Date();
+	var MonthsDays = {
+			一月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			二月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28],
+			三月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			四月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+			五月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			六月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+			七月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			八月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			九月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+			十月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			十一月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+			十二月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+		};
+		var months=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月',
+    		'十一月','十二月'];
+		//获取该月
+		var nowMonth=today.getMonth()*1;
+		/*
+		var months=[];
+		//之前所有的时间抹去
+		for(var i=nowMoth-1;i<=11-nowMoth;i++){
+			months.push(monthsValue[i]);
+		}
+		alert(":"+months.length);
+		
+		//获取当前日期 加上权限时间
+		var nowDay=today.getDate()+dayNum;
+		//获取该月最大日期
+		var maxInMonth= new Date(today.getFullYear(), today.getMonth()*1 + 1, 0).getDate()*1;
+		var newMonthDay=[];
+		for(var i=nowDay;i<=maxInMonth;i++){
+			newMonthDay.push(i);
+		}
+		//重新赋值
+		var newMonthsDays=MonthsDays;
+		newMonthsDays[months[nowMonth]]=newMonthDay;
+		//生成日期选择器
+		var pickerDependent = myApp.picker({
+		    input: id,
+		    rotateEffect: true,
+		    toolbarCloseText:"完成",
+		    formatValue: function (picker, values) {
+		        return values[0]+"-"+(values[1]<10?"0"+values[1]:values[1])+"-"+(values[2]<10?"0"+values[2]:values[2])+" "+values[4]+":"+values[5];
+		    },
+		    value: [today.getFullYear(),today.getMonth()+1, today.getDate(), "一" ,today.getHours(), (today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes())],
+		    onChange:function(picker,values){
+            	var year= picker.cols[0].value;
+        		var month= picker.cols[1].value;
+        		month=month<10?"0"+month:month;
+        		var day= picker.cols[2].value;
+        		day=day<10?"0"+day:day;
+        		var weekDay=new Date(year+"-"+month+"-"+day).getDay();
+       			var xingqi=['日','一','二','三','四','五','六'];
+        		var attr=[xingqi[weekDay]];
+        		 if(picker.cols[3].replaceValues){
+        			picker.cols[3].replaceValues(attr);
+	               }
+            },
+		    cols: [{
+		    	 values: (function () {
+		                var arr = [today.getFullYear(),today.getFullYear()+1];
+		                return arr;
+		            })(),
+            },{
+		            textAlign: 'left',
+		            values: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+		            displayValues:months ,
+		            onChange: function (picker,value,display) {
+		                if(picker.cols[2].replaceValues){
+		                    picker.cols[2].replaceValues(MonthsDays[display]);
+		                }
+		            }
+		        },{
+		            values: MonthsDays.一月,
+		        },{
+		        	values:['日','一','二','三','四','五','六']	,
+		        },
+		        // Space divider
+		        {
+		            divider: true,
+		            content: '  '
+		        },
+		        // Hours
+		        {
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 23; i++) { arr.push(i); }
+		                return arr;
+		            })(),
+		        },
+		        // Divider
+		        {
+		            divider: true,
+		            content: ':'
+		        },
+		        // Minutes
+		        {
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 59; i++) { arr.push(i < 10 ? '0' + i : i); }
+		                return arr;
+		            })(),
+		        }
+		    ]
+		});
+}
+*/
+function datePick(id,dayNum){
+	var today = new Date();
+	var myApp = new Framework7();
+	var today = new Date();
+	var MonthsDays = {
+			一月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			二月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28],
+			三月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			四月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+			五月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			六月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+			七月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			八月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			九月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+			十月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+			十一月 : [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+			十二月: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+		};
+		var months=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月',
+    		'十一月','十二月'];
+		//获取该月
+		var nowMonth=today.getMonth()*1;
+		/*
+		var months=[];
+		//之前所有的时间抹去
+		for(var i=nowMoth-1;i<=11-nowMoth;i++){
+			months.push(monthsValue[i]);
+		}
+		alert(":"+months.length);
+		*/
+		//获取当前日期 加上权限时间
+		var nowDay=today.getDate()+dayNum;
+		//获取该月最大日期
+		var maxInMonth= new Date(today.getFullYear(), today.getMonth()*1 + 1, 0).getDate()*1;
+		var newMonthDay=[];
+		for(var i=nowDay;i<=maxInMonth;i++){
+			newMonthDay.push(i);
+		}
+		//重新赋值
+		//var newMonthsDays=MonthsDays;
+		MonthsDays[months[nowMonth]]=newMonthDay;
+		//生成日期选择器
+		var pickerDependent = myApp.picker({
+		    input: id,
+		    rotateEffect: true,
+		    toolbarCloseText:"完成",
+		    formatValue: function (picker, values) {
+		        return values[0]+"-"+(values[1]<10?"0"+values[1]:values[1])+"-"+(values[2]<10?"0"+values[2]:values[2])+" "+values[4]+":"+values[5];
+		    },
+		    value: [today.getFullYear(),today.getMonth()+1, today.getDate(), "一" ,today.getHours(), (today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes())],
+		    onChange:function(picker,values){
+				
+				
+				
+            	var year= picker.cols[0].value;
+        		var month= picker.cols[1].value;
+        		month=month<10?"0"+month:month;
+        		var day= picker.cols[2].value;
+        		day=day<10?"0"+day:day;
+        		var weekDay=new Date(year+"-"+month+"-"+day).getDay();
+       			var xingqi=['日','一','二','三','四','五','六'];
+        		var attr=[xingqi[weekDay]];
+        		 if(picker.cols[3].replaceValues){
+        			picker.cols[3].replaceValues(xingqi);
+	               }
+            },
+		    cols: [{
+		    	 values: (function () {
+		                var arr = [today.getFullYear(),today.getFullYear()+1];
+		                return arr;
+		            })(),
+		            onChange:function(picker){
+		            	//年份在变
+				    	if(today.getFullYear()==picker.cols[0].value){
+					    	var vls=[];
+			            	//获取当前月份
+			            	var nowMonth=today.getMonth()*1+1;
+			            	for(var i=nowMonth;i<=12;i++){
+			            		vls.push(i);
+			            	}
+			            	 if(picker.cols[1].replaceValues){
+				                    picker.cols[1].replaceValues(vls);
+				                }
+					    	}else{
+						    	var ls=['1','2','3','4','5','6','7','8','9','10','11','12'];
+					    		if(picker.cols[1].replaceValues){
+				                    picker.cols[1].replaceValues(ls);
+			                	}
+				    	}
+		            }
+            },{
+		            textAlign: 'left',
+		            values: ["1","2","3"],
+		            displayValues:months ,
+		            onChange:function(picker,value,display){
+		            	if(picker.cols[2].replaceValues){
+		                  //  alert(display);
+		                   // alert(today.getMonth()+1==display);
+		                   	var MonthDay=[];
+		                    if(today.getMonth()+1==display&&today.getFullYear()==picker.cols[0].value){
+		                    	var maxInMonth= new Date(today.getFullYear(), today.getMonth()*1 + 1, 0).getDate()*1;
+		                    	var nowDay=today.getDate();
+		                    	for(var i=nowDay;i<=maxInMonth;i++){
+		                			MonthDay.push(i);
+		                		}
+		            			picker.cols[2].replaceValues(MonthDay);
+		                    }else{
+		                    	if(display==1||display==3||display==5||display==7||display==8||display==10||display==12){
+		                    		for(var i=1;i<=31;i++){
+		                    			MonthDay.push(i);
+		                    		}
+		                    	}
+		                    	if(display==4||display==6||display==9||display==11){
+		                    		for(var i=1;i<=30;i++){
+		                    			MonthDay.push(i);
+		                    		}
+		                    	}
+		                    	if(display==2){
+		                    		var maxIn2Month= new Date(picker.cols[0].value, 3, 0).getDate()*1;
+		                    		for(var i=1;i<=maxIn2Month;i++){
+		                    			MonthDay.push(i);
+		                    		}
+		                    	}
+		                    	picker.cols[2].replaceValues(MonthDay);
+		                    	MonthsDays[display]
+		                    }
+	                	}
+		            }
+		            
+		        },{
+		            values: MonthsDays.一月,
+		        },{
+		        	values:['日','一','二','三','四','五','六']	,
+		        },
+		        // Space divider
+		        {
+		            divider: true,
+		            content: '  '
+		        },
+		        // Hours
+		        {
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 23; i++) { arr.push(i); }
+		                return arr;
+		            })(),
+		        },
+		        // Divider
+		        {
+		            divider: true,
+		            content: ':'
+		        },
+		        // Minutes
+		        {
+		            values: (function () {
+		                var arr = [];
+		                for (var i = 0; i <= 59; i++) { arr.push(i < 10 ? '0' + i : i); }
+		                return arr;
+		            })(),
+		        }
+		    ]
+		});
+
+	}
+</script>
+<script type="text/javascript">
+	function selectFileImage(file) {
+		//图片方向角 added by lzk 
+		var Orientation = null;
+
+		if (file) {
+			var rFilter = /^(image\/jpeg|image\/png)$/i; // 检查图片格式 
+			if (!rFilter.test(file.type)) {
+				return;
+			}
+			//获取照片方向角属性，用户旋转控制 
+			EXIF.getData(file, function() {
+				EXIF.getAllTags(this);
+				Orientation = EXIF.getTag(this, 'Orientation');
+			});
+
+			var oReader = new FileReader();
+			oReader.onload = function(e) {
+				var image = new Image();
+				image.src = e.target.result;
+				image.onload = function() {
+					/*
+					  var expectWidth = this.naturalWidth; 
+					var expectHeight = this.naturalHeight; 
+					  
+					if (this.naturalWidth > this.naturalHeight && this.naturalWidth > 800) { 
+					  expectWidth = 800; 
+					  expectHeight = expectWidth * this.naturalHeight / this.naturalWidth; 
+					} else if (this.naturalHeight > this.naturalWidth && this.naturalHeight > 1200) { 
+					  expectHeight = 1200; 
+					  expectWidth = expectHeight * this.naturalWidth / this.naturalHeight; 
+					} 
+					 */
+					var square = 320;
+
+					var imageWidth;
+					var imageHeight;
+					var offsetX = 0;
+					var offsetY = 0;
+					if (this.width > this.height) {
+						imageWidth = Math.round(square * this.width
+								/ this.height);
+						imageHeight = square;
+						offsetX = -Math.round((imageWidth - square) / 2);
+					} else {
+						imageHeight = Math.round(square * this.height
+								/ this.width);
+						imageWidth = square;
+						offsetY = -Math.round((imageHeight - square) / 2);
+					}
+					var canvas = document.querySelector('canvas');
+					var ctx = canvas.getContext("2d");
+					//canvas.width = expectWidth; 
+					//canvas.height = expectHeight; 
+					alert(canvas.width + ":thisw:" + imageHeight);
+					//ctx.drawImage(this, 0, 0, expectWidth, expectHeight); 
+					canvas.width = imageWidth;
+					canvas.height = imageHeight;
+
+					ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
+					var base64 = null;
+					var fsz = 0;
+					this.width = imageWidth;
+					this.height = imageHeight;
+					alert(this.width + ";" + this.height);
+					var canvas = document.querySelector('canvas');
+					var ctx = canvas.getContext("2d");
+					ctx.font = 30 + "px microsoft yahei";
+					ctx.textBaseline = 'middle';//更改字号后，必须重置对齐方式，否则居中麻烦。设置文本的垂直对齐方式
+					ctx.textAlign = 'center';
+					var text = "和物力来";
+					var n = text.length;
+					//alert(n);
+					var ftop = canvas.height / 2;
+					var fleft = canvas.width / 2;
+					alert("top:" + canvas.height + ":left:" + fleft);
+					ctx.fillStyle = "#ffffff";
+					ctx.fillText(text, ftop, fleft);//文本元素在画布居中方式  
+					ctx.save();
+					/*
+					//修复ios 
+					alert(Orientation);
+					if (navigator.userAgent.match(/iphone/i)) { 
+					  //console.log('iphone'); 
+					  if(Orientation != "" && Orientation != 1){ 
+					    alert('旋转处理'); 
+					    switch(Orientation){ 
+					      case 6://需要顺时针（向左）90度旋转 
+					        alert('需要顺时针（向左）90度旋转'); 
+					        rotateImg(this,'left',canvas); 
+					        shuiy();
+					        break; 
+					      case 8://需要逆时针（向右）90度旋转 
+					        //alert('需要顺时针（向右）90度旋转'); 
+					        rotateImg(this,'right',canvas); 
+					        break; 
+					      case 3://需要180度旋转 
+					        //alert('需要180度旋转'); 
+					        rotateImg(this,'right',canvas);//转两次 
+					        rotateImg(this,'right',canvas); 
+					        break; 
+					    }     
+					  } 
+					  fsz=50;
+					  base64 = canvas.toDataURL("image/jpeg", 0.8); 
+					}else if (navigator.userAgent.match(/dAndroid/i)) {// 修复android 
+					  var encoder = new JPEGEncoder();
+					  fsz=50;
+					  base64 = encoder.encode(ctx.getImageData(0, 0, expectWidth, expectHeight), 80); 
+					}else{ 
+					  //alert(Orientation); 
+					  if(Orientation != "" && Orientation != 1){ 
+					    //alert('旋转处理'); 
+					    switch(Orientation){ 
+					      case 6://需要顺时针（向左）90度旋转 
+					        //alert('需要顺时针（向左）90度旋转'); 
+					        rotateImg(this,'left',canvas); 
+					        break; 
+					      case 8://需要逆时针（向右）90度旋转 
+					        //alert('需要顺时针（向右）90度旋转'); 
+					        rotateImg(this,'right',canvas); 
+					        break; 
+					      case 3://需要180度旋转 
+					        //alert('需要180度旋转'); 
+					        rotateImg(this,'right',canvas);//转两次 
+					        rotateImg(this,'right',canvas); 
+					        break; 
+					    }     
+					  } 
+					  fsz=30;
+					  base64 = canvas.toDataURL("image/png", 0.8);
+					  shuiy();
+					}
+					 */
+
+					//$("#myImage").attr("src", base64); 
+				};
+			};
+			oReader.readAsDataURL(file);
+		}
+	}
+	function shuiy() {
+		alert("shuiyan");
+		var canvas = document.querySelector('canvas');
+		var ctx = canvas.getContext("2d");
+		ctx.font = 30 + "rem microsoft yahei";
+		ctx.textBaseline = 'middle';//更改字号后，必须重置对齐方式，否则居中麻烦。设置文本的垂直对齐方式
+		ctx.textAlign = 'center';
+		var text = "和物力来";
+		var n = text.length;
+		//alert(n);
+		var ftop = canvas.height / 2;
+		var fleft = canvas.width / 2;
+		alert("top:" + canvas.height + ":left:" + fleft);
+		ctx.fillStyle = "#ffffff";
+		ctx.fillText(text, 0, 0);//文本元素在画布居中方式  
+		ctx.save();
+	}
+	//对图片旋转处理 added by lzk 
+	function rotateImg(img, direction, canvas) {
+		//alert(img); 
+		//最小与最大旋转方向，图片旋转4次后回到原方向  
+		var min_step = 0;
+		var max_step = 3;
+		alert("五娘");
+		//var img = document.getElementById(pid);  
+		if (img == null)
+			return;
+		//img的高度和宽度不能在img元素隐藏后获取，否则会出错  
+		var height = img.height;
+		var width = img.width;
+		alert(height + ";" + width);
+		//var step = img.getAttribute('step');  
+		var step = 2;
+		if (step == null) {
+			step = min_step;
+		}
+		if (direction == 'right') {
+			step++;
+			//旋转到原位置，即超过最大值  
+			step > max_step && (step = min_step);
+		} else {
+			step--;
+			step < min_step && (step = max_step);
+		}
+		//旋转角度以弧度值为参数  
+		var degree = step * 90 * Math.PI / 180;
+		var ctx = canvas.getContext('2d');
+		switch (step) {
+		case 0:
+			alert("XX");
+			canvas.width = width;
+			canvas.height = height;
+			ctx.drawImage(img, 0, 0);
+			break;
+		case 1:
+			alert("1")
+			canvas.width = height;
+			canvas.height = width;
+			ctx.rotate(degree);
+			ctx.drawImage(img, 0, -height, width, height);
+			break;
+		case 2:
+			alert("2")
+			canvas.width = width;
+			canvas.height = height;
+			ctx.rotate(degree);
+			ctx.drawImage(img, -width, -height);
+			break;
+		case 3:
+			alert("3")
+			canvas.width = height;
+			canvas.height = width;
+			ctx.rotate(degree);
+			ctx.drawImage(img, -width, 0);
+			break;
+		}
+	}
+	function testViedo(){
+		var video = document.getElementById("video");
+		var context = canvas.getContext("2d")
+		var errocb = function () {
+                   console.log('sth wrong!');
+       }
+		if (navigator.getUserMedia) { // 标准的API
+            navigator.getUserMedia({ "video": true }, function (stream) {
+                video.src = stream;
+                video.play();
+            }, errocb);
+	} else if (navigator.webkitGetUserMedia) { // WebKit 核心的API
+            navigator.webkitGetUserMedia({ "video": true }, function (stream) {
+                video.src = window.webkitURL.createObjectURL(stream);
+                video.play();
+            }, errocb);
+}
+		document.getElementById("picture").addEventListener("click", function () {
+            context.drawImage(video, 0, 0, 640, 480);
+});
+	}
+</script>
+ <script type="text/javascript">
+      window.onload = function (){
+          try{
+              //动态创建一个canvas元 ，并获取他2Dcontext。如果出现异常则表示不支持
+              document.createElement("canvas").getContext("2d");
+              document.getElementById("support").innerHTML = "浏览器支持HTML5 CANVAS";
+          }catch(e){
+              document.getElementById("support").innerHTML = "浏览器不支持HTML5 CANVAS";
+          }
+      };
+ 
+      //这段代 主要是获取摄像头的视频流并显示在Video 签中
+      window.addEventListener("DOMContentLoaded", function () {
+          var video = document.getElementById("video");
+          var videoObj = { "video": true };
+          var errBack = function (error){
+                  console.log("Video capture error: " + error.message, error.code);
+              };
+          //  支持浏览器  谷歌,火狐,360,欧朋
+          //navigator.getUserMedia这个写法在Opera中好像是navigator.getUserMedianow
+          if (navigator.getUserMedia) {
+              navigator.getUserMedia(videoObj, function (stream) {
+                  video.src = stream;
+                  video.play();
+              }, errBack);
+          } else if (navigator.webkitGetUserMedia) {
+              navigator.webkitGetUserMedia(videoObj, function (stream) {
+                  video.src = window.URL.createObjectURL(stream);
+                  video.play();
+              }, errBack);
+          } else if (navigator.mozGetUserMedia){
+              navigator.mozGetUserMedia(videoObj, function (stream) {
+                       video.src = window.URL.createObjectURL(stream);
+                      video.play();
+              }, errBack);
+          }
+          
+          
+          //这个是拍照按钮的事件，
+          document.getElementById("snap").addEventListener("click",function(){
+                  CatchCode();
+          });
+      }, false);
+      //定时器
+      //var interval = setInterval(CatchCode, "300");
+      //这个是 刷新上 图像的
+      function CatchCode() {
+          //实际运用可不写，测试代 ， 为单击拍照按钮就获取了当前图像，有其他用途
+          var canvans = document.getElementById("canvas");
+          var video = document.getElementById("video");
+          var context = canvas.getContext("2d");
+ 
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          context.drawImage(video,0,0);
+          
+          //获取浏览器页面的画布对象
+          //以下开始编 数据
+          var imgData = canvans.toDataURL("image/jpg");
+          //将图像转换为base64数据
+          var base64Data = imgData.split(",")[1];
+ 
+          var xhr = new XMLHttpRequest();
+          xhr.open("post", "${ctx}/webcam.do", true);
+          //告诉服务器是以个Ajax 请求
+          xhr.setRequestHeader("X-Requested-Width", "XMLHttpRequest");
+          var fd = new FormData();
+          fd.append("doc",base64Data);
+          xhr.send(fd);
+ 
+          //alert(base64Data);
+ 
+          //在前端截取22位之后的字符串作为图像数据
+          //开始异步上
+      }
+     </script>
+<!-- 
+<script>   
+	function getImg(text,text1,text2,fsz,dataUrl){
+		   var c = document.getElementById("myCanvas");
+		   var cxt = c.getContext("2d");
+		   var img = new Image();
+		   img.src = dataUrl;
+		   img.onload=function(){//图片加载完成，才可处理
+			   cxt.drawImage(img,0,0,300,200);
+		      cxt.font = fsz+"px Arial";
+		      cxt.textBaseline = 'middle';//更改字号后，必须重置对齐方式，否则居中麻烦。设置文本的垂直对齐方式
+		      cxt.textAlign = 'center';
+		      var tw = cxt.measureText(text).width;
+		      var ftop = c.height/2;
+		      var fleft = c.width/2;
+		      	cxt.fillStyle="#ff0000";
+		      	var hig=fsz*3+5;
+		        cxt.fillRect(fleft-tw/2,ftop-fsz/2,tw,hig);//矩形在画布居中方式
+		        cxt.fillStyle="#ffffff";
+		        cxt.fillText(text,fleft,ftop);//文本元素在画布居中方式
+		        var ftop2=ftop+fsz;
+		        cxt.fillStyle="#00f";
+		        cxt.fillText(text1,fleft,ftop2);
+		        var ftop3=ftop2+fsz;
+		        cxt.fillStyle="#0f0";
+		        cxt.fillText(text2,fleft,ftop3);
+		        cxt.strokeStyle = 'yellow';
+		        //cxt.strokeText(text,fleft,ftop);//文字边框
+		        cxt.save(); 
+		        cxt.fill();
+		   }
+		   
+	}
+	function convertCanvasToImage(canvas) {
+		 var image = new Image();
+		 image.src = canvas.toDataURL("image/png");
+		 return image;
+		 }
+	$(function() {
+		//拍照后获取到需要的信息拼接成水印获取到有水印的图片
+		var img;
+		$("#file_upload").change(function(event) {
+			alert(event);
+		var $file = $(this);
+		var fileObj = $file[0];
+		var windowURL = window.URL || window.webkitURL;
+		var dataURL;
+		var $img = $("#preview");
+		if(fileObj && fileObj.files && fileObj.files[0]){
+		dataURL = windowURL.createObjectURL(fileObj.files[0]);
+		$img.attr('src',dataURL);
+		}
+		 getImg("刘超🙄  ","地址","时间",20,dataURL);
+		});
+		$("#img_btn").click(function(){
+		 var c=document.getElementById("myCanvas");
+		 img=c.toDataURL("image/png");
+			console.log($("#myCanvas"));
+		var imageDataB64 = img.substring(22);
+         alert("ok");
+		alert(img);	
+		$.ajax({
+			url:base_path+"/image/testImage.do",
+			type:"post",
+			data:{"data":imageDataB64},
+			dataType:"json",
+			success:function(result){
+				if(result.status==0){//成功
+					alert(result.msg);//提示成功
+				}else {//用户名被占
+					alert(result.msg);
+				}
+			},
+			error:function(){
+				alert("注册异常");
+			}
+		});
+		})
+		$("canvas").click(function(){
+			alert(233);
+			var c=$(this)[0];
+	        fullScreen(c);  
+	    });
+		});
+	function fullScreen(c) {  
+        var element = c,method = "RequestFullScreen";  
+          
+  
+        var prefixMethod;  
+        ["webkit", "moz", "ms", "o", ""].forEach(function(prefix) {  
+            if (prefixMethod)   
+                return;  
+            if (prefix === "") {  
+                // 无前缀，方法首字母小写  
+                method = method.slice(0,1).toLowerCase() + method.slice(1);  
+            }  
+            var fsMethod = typeof element[prefix + method];  
+                if (fsMethod + "" !== "undefined") {  
+                    // 如果是函数,则执行该函数  
+                    if (fsMethod === "function") {  
+                        prefixMethod = element[prefix + method]();  
+                    } else {  
+                        prefixMethod = element[prefix + method];  
+                    }  
+                }  
+            }  
+        );  
+        return prefixMethod;  
+    };  
+</script>
+ -->
+</head>
+<body>
+	<!-- Status bar overlay for full screen mode (PhoneGap) -->
+	<div class="statusbar-overlay"></div>
+	<!-- Views -->
+	<div class="views">
+		<!-- Your main view, should have "view-main" class -->
+		<div class="view view-main">
+			<!-- Top Navbar-->
+			<div class="navbar">
+				<div class="navbar-inner">
+					<!-- We need cool sliding animation on title element, so we have additional "sliding" class -->
+					<div class="center sliding">Awesome App</div>
+				</div>
+			</div>
+			<!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
+			<div class="pages navbar-through toolbar-through">
+				<!-- Page, "data-page" contains page name -->
+				<div data-page="index" class="page">
+					<!-- Scrollable page content -->
+					<div class="page-content">
+						<p>Page content goes here</p>
+						<!-- Link to another page -->
+						<div class="content-block-title">Inline Picker / Date-time</div>
+						<div class="content-block">
+							<div style="padding: 0; margin-right: -15px; width: auto"
+								class="content-block-inner">
+								<div style="margin: 0" class="list-block">
+									<ul style="border-top: none">
+										<li>
+											<div class="item-content">
+												<div class="item-inner">
+													<div class="item-input">
+														<input type="text" placeholder="Date Time" readonly
+															id="picker-dependent">
+													</div>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div id="picker-date-container"></div>
+								<input type="datetime-local" value="2017-12-10T22:12:00">
+								  <div id="support"></div>
+						        <div id="contentHolder">       
+						            <video id="video" width="160" height="120" style="border:1px solid red" autoplay></video>       
+						            <button id="snap"> 拍照</button>        
+						            <canvas style="border:1px solid red" id="canvas"></canvas> 
+						        </div>
+    							<br>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Bottom Toolbar-->
+			<div class="toolbar">
+				<div class="toolbar-inner">
+					<!-- Toolbar links -->
+					<a href="#" class="link">Link 1</a> <a href="#" class="link">Link
+						2</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

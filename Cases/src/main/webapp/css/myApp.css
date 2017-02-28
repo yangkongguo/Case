@@ -1,0 +1,52 @@
+a{
+	text-decoration:none;
+}
+a:link{
+	text-decoration:none;   /* 指正常的未被访问过的链接*/
+}
+a:visited{
+	text-decoration:none; /*指已经访问过的链接*/
+}
+a:hover{
+	text-decoration:none;/*指鼠标在链接*/}
+a:active{
+	text-decoration:none;/* 指正在点的链接*/ 
+}
+.fight{
+	filter:glow(color=skyblue,direction=2);
+	font-family: 华文行楷；
+}
+.files-class{
+	padding: 4px 10px;
+    height: 25px;
+    line-height: 20px;
+    position: relative;
+    cursor: pointer;
+    color: #888;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+}
+.files-class input{
+	position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+.colo-greenBlue{
+	color: #20B2AA;
+}
+.infinite-scroll-preloader {
+  margin-top:-20px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.infinite-scroll-preloader .preloader {
+  width:34px;
+  height:34px;
+}  

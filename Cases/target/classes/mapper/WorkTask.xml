@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="towaynet.dao.WorkTaskDao">
+
+<insert id="save" parameterType="towaynet.entity.WorkTask" >
+	insert into workTask(
+		workTask_id,
+		workTask_num,
+	    workTask_name,
+	    workTask_map,
+	    workTask_guest_tel,
+	    workTask_desc,
+	    workTask_start_time,
+	    workTask_finsh_time,
+	    workTask_status,
+	    workTask_type,
+	    workTask_engineer_name,
+	    workTask_engineer_id,
+	    workTask_sponsor_name,
+	    workTask_guest_name,
+	    request_id
+	)values(
+		#{workTask_id},
+		#{workTask_num},
+	    #{workTask_name},
+	    #{workTask_map},
+	    #{workTask_guest_tel},
+	    #{workTask_desc},
+	    #{workTask_start_time},
+	    #{workTask_finsh_time},
+	    #{workTask_status},
+	    #{workTask_type},
+	    #{workTask_engineer_name},
+	    #{workTask_engineer_id},
+	    #{workTask_sponsor_name},
+	    #{workTask_guest_name},
+	    #{request_id}
+	);
+</insert>
+
+<!-- status 0为初始化的工单 1为签到工单 6为签到签退完成工单 2为申请删除工单  3为申请完成-关闭工单  4为删除工单 5为关闭Case-->
+<!-- 根据月份来查所有的工单 -->
+<select id="workTaskList" resultType="towaynet.entity.WorkTask" parameterType="string">
+	select * from workTask where workTask_finsh_time like#{month} order by workTask_start_time desc;
+</select>
+<!-- 搜索指定工程师名字 -->
+<select id="engineerWorkTask" resultType="towaynet.entity.WorkTask" parameterType="map">
+	select * from workTask where  workTask_engineer_name like #{engineer_name} and workTask_finsh_time like #{month} order by workTask_start_time desc;
+</select>
+<select id="engineerWorkTaskUnFinsh" resultType="towaynet.entity.WorkTask" parameterType="string">
+	select * from workTask where (workTask_status=0 or workTask_status=1 or workTask_status=6) and workTask_engineer_id=#{id};
+</select>
+<!-- 工单完成数 -->
+<select id="engineerWorkTaskFinsh" resultType="towaynet.entity.WorkTask" parameterType="map">
+	select * from workTask where workTask_status=5 and workTask_engineer_id=#{id} and workTask_finsh_time like #{year} order by workTask_start_time desc;
+</select>
+
+<select id="findRemark" resultType="string" parameterType="string">
+	select workTask_engineer_remark from workTask where workTask_id=#{id};
+</select>
+<select id="findWorkTaskBySponsorName" resultType="towaynet.entity.WorkTask" parameterType="map">
+	select * from workTask where workTask_sponsor_name=#{workTask_sponsor_name} and workTask_start_time like #{year}  order by workTask_start_time desc;
+</select>
+<select id="findWorkTaskBySponsorNameToEngineer" resultType="towaynet.entity.WorkTask" parameterType="map">
+	select * from workTask where workTask_sponsor_name=#{workTask_sponsor_name} and workTask_engineer_name=#{workTask_engineer_name} and (workTask_status=0 or workTask_status=1 or workTask_status=6)  order by workTask_start_time desc;
+</select>
+<select id="findApplyWT" resultType="towaynet.entity.WorkTask" parameterType="int">
+	select * from workTask where workTask_status=#{status} order by workTask_start_time desc;
+</select>
+<select id="findNumberByTheMon" resultType="int" parameterType="map">
+   select count(*) from workTask where workTask_start_time like #{month} and workTask_engineer_id=#{id} and workTask_status=5;
+</select>
+<select id="findNumberByTheYear" resultType="int" parameterType="map">
+   select count(*) from workTask where workTask_start_time like #{year} and workTask_engineer_id=#{id} and workTask_status=5;
+</select>
+<select id="findNumberByTheUndo" resultType="int" parameterType="string">
+   select count(*) from workTask where workTask_engineer_id=#{id} and (workTask_status=0 or workTask_status=1 or workTask_status=6);
+</select>
+<select id="findSubNum" resultType="int" parameterType="string">
+	select count(*) from workTask where workTask_sponsor_name=#{workTask_sponsor_name} and workTask_status=0 order by workTask_start_time desc;  
+</select>
+<select id="findExcuteNum" resultType="int" parameterType="string">
+	select count(*) from workTask where workTask_sponsor_name=#{workTask_sponsor_name} and (workTask_status=1 or workTask_status=6)order by workTask_start_time desc; 
+</select>
+<select id="findCloseNum" resultType="int" parameterType="string">
+	select count(*) from workTask where workTask_sponsor_name=#{workTask_sponsor_name} and workTask_status=5 order by workTask_start_time desc;   
+</select>
+<select id="findSubTask" resultType="towaynet.entity.WorkTask" parameterType="string">
+	select * from workTask where workTask_sponsor_name=#{workTask_sponsor_name} and workTask_status=0 order by workTask_start_time desc;  
+</select>
+<select id="findExcuteTask" resultType="towaynet.entity.WorkTask" parameterType="string">
+	select * from workTask where workTask_sponsor_name=#{workTask_sponsor_name} and (workTask_status=1 or workTask_status=6)order by workTask_start_time desc;  
+</select>
+<select id="findCloseTask" resultType="towaynet.entity.WorkTask" parameterType="string">
+	select * from workTask where workTask_sponsor_name=#{workTask_sponsor_name} and workTask_status=5 order by workTask_start_time desc;  
+</select>
+<select id="findPaiMingByEId" resultType="string" parameterType="map">
+select o.rownum from(
+SELECT
+    obj_new.c,
+    obj_new.workTask_engineer_id,
+    obj_new.rownum
+FROM
+    (
+        SELECT
+            obj.c,
+            obj.workTask_engineer_id,
+            @rownum := @rownum + 1 AS num_tmp,
+            @incrnum := CASE
+        WHEN @rowtotal = obj.c THEN
+            @incrnum
+        WHEN @rowtotal := obj.c THEN
+            @rownum
+        END AS rownum
+        FROM
+            (
+			select  workTask_engineer_id,count(*) c 
+			  from workTask 
+			  where workTask_start_time like #{start_time} and workTask_status=5 
+			  group by workTask_engineer_id order by c desc
+            ) AS obj,
+            (
+                SELECT
+                    @rownum := 0 ,@rowtotal := NULL ,@incrnum := 0
+            ) r
+    ) AS obj_new)as o where workTask_engineer_id=#{engineerId};
+
+</select>
+<select id="searchWorkTaskFinshByWorkName" resultType="towaynet.entity.WorkTask" parameterType="map">
+	select * from workTask where workTask_status=5 and workTask_engineer_id=#{id} and workTask_name like #{workName} order by workTask_start_time desc;
+</select>
+<!-- 获取工程师的ID -->
+<select id="findEngineerIdWhoWorkNow" resultType="string" parameterType="map">
+	select workTask_engineer_id from workTask where workTask_start_time like #{date};
+</select>
+<select id="findRequestIdByWorkID" resultType="string" parameterType="string">
+	select request_id from workTask where workTask_id=#{id} ;
+</select>
+<!-- 分页查询 -->
+<select id="pageSelect" parameterType="map" resultType="towaynet.entity.WorkTask">
+	select * from workTask where workTask_finsh_time like#{month} order by workTask_start_time desc limit #{num},10;
+</select>
+<!-- 更新 -->
+<update id="workTaskUpdate" parameterType="map">
+ 	update workTask set workTask_status=#{status} where workTask_id=#{workTask_id};
+</update>
+<update id="workTaskUpdateRemark" parameterType="map">
+ 	update workTask set workTask_engineer_remark=#{remark} where workTask_id=#{workTask_id};
+</update>
+<!-- 删除 -->
+<delete id="workTaskdeleteByWID" parameterType="string">
+	delete from workTask where workTask_id=#{id};
+</delete>
+</mapper> 

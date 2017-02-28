@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="towaynet.dao.RequestTableDao">
+<!-- insert -->
+<insert id="save" parameterType="towaynet.entity.RequestTable" >
+	insert into request(
+		request_id,
+	    request_name,
+	    request_map,
+	    request_guest_name,
+	    request_guest_tel,
+	    request_desc,
+	    request_start_time,
+	    request_finsh_time,
+	    request_status,
+	    request_type,
+	    request_sponsor_id,
+	    request_sponsor_name,
+	    request_guest_company,
+	    request_caseNum
+	)values(
+		#{request_id},
+	    #{request_name},
+	    #{request_map},
+	    #{request_guest_name},
+	    #{request_guest_tel},
+	    #{request_desc},
+	    #{request_start_time},
+	    #{request_finsh_time},
+	    #{request_status},
+	    #{request_type},
+	    #{request_sponsor_id},
+	    #{request_sponsor_name},
+	    #{request_guest_company},
+	    #{request_caseNum}
+	);
+</insert>
+<!-- select -->
+<!-- status 0为刚发生请求 1为草稿箱请求 2为同意请求 3为忽略请求 4为执行中 5为 关闭-->
+<select id="requestList" resultType="towaynet.entity.RequestTable">
+	select * from request where request_status=0 order by request_start_time desc;
+</select>
+<select id="requestListByAlreadySend" resultType="towaynet.entity.RequestTable">
+	select * from request where request_status=2 order by request_start_time desc;
+</select>
+<select id="findRequestById" parameterType="string" resultType="towaynet.entity.RequestTable">
+	select * from request where request_id=#{request_id};
+</select>
+<!-- 查询草稿箱 -->
+<select id="draftList" resultType="towaynet.entity.RequestTable" parameterType="string">
+	select * from request where request_status=1 and request_sponsor_id=#{userid};
+</select>
+<!-- 查看指定人发出去的所有请求 -->
+<select id="findAllReqBySponsorName" resultType="towaynet.entity.RequestTable" parameterType="map">
+	select * from request where request_sponsor_name=#{userName} and request_start_time like #{year}  
+	order by request_start_time desc;
+</select>
+<!--查看请求数据情况 -->
+<select id="findSubNum" resultType="int" parameterType="map">
+	select count(*) from request where request_sponsor_name=#{userName} 
+		and request_start_time like #{year} and request_status=2 order by request_start_time desc;  
+</select>
+<select id="findExcuteNum" resultType="int" parameterType="map">
+	select count(*) from request where request_sponsor_name=#{userName} 
+		and request_start_time like #{year} and request_status=4 order by request_start_time desc; 
+</select>
+<select id="findCloseNum" resultType="int" parameterType="map">
+	select count(*) from request where request_sponsor_name=#{userName} 
+		and request_start_time like #{year} and request_status=5 order by request_start_time desc;   
+</select>
+<select id="findAllReqNumByYear" resultType="int" parameterType="map">
+	select count(*) from request where request_sponsor_name=#{userName} 
+		and request_start_time like #{year} order by request_start_time desc;   
+</select>
+<select id="findSubTask" resultType="towaynet.entity.RequestTable" parameterType="map">
+	select * from request where request_sponsor_name=#{userName} 
+		and request_start_time like #{year} and request_status=2 order by request_start_time desc;  
+</select>
+<select id="findExcuteTask" resultType="towaynet.entity.RequestTable" parameterType="map">
+	select * from request where request_sponsor_name=#{userName} 
+		and request_start_time like #{year} and request_status=4 order by request_start_time desc;  
+</select>
+<select id="findCloseTask" resultType="towaynet.entity.RequestTable" parameterType="map">
+	select * from request where request_sponsor_name=#{userName} 
+		and request_start_time like #{year} and request_status=5 order by request_start_time desc;  
+</select>
+<!-- 搜索框中的根据搜索名查看以派工的请求-->
+<select id="findSendRequestBySponsorName" resultType="towaynet.entity.RequestTable" parameterType="string">
+		select * from request where request_sponsor_name=#{request_sponsor_name} and request_status=2 order by request_start_time desc;  
+</select>
+<!-- 根据用户名查询请求表 -->
+<select id="findBySponsorName" resultType="towaynet.entity.RequestTable">
+		select * from request where request_sponsor_name=#{request_sponsor_name} and request_status=0 order by request_start_time desc;  
+</select>
+<!-- 分页查询 -->
+<select id="findAllReqBySponsorNameByPageNum" resultType="towaynet.entity.RequestTable" parameterType="map">
+		select * from request where request_sponsor_name=#{userName} and request_start_time like #{year}  
+			order by request_start_time desc  limit #{num},10;
+</select>
+<select id="findEngineerIdByRequestId" resultType="string" parameterType="string">
+	select request_engineerId from request where request_id=#{request_id}; 
+</select>
+<!-- 在我的请求页面根据request_name搜索 -->
+<select id="findRequestByRequestName" resultType="towaynet.entity.RequestTable" parameterType="string">
+	select* from request where request_name like #{request_name};
+</select>
+<!-- update -->
+<update id="requestUpdate" parameterType="map">
+ 	update request set request_status=#{status} where request_id=#{request_id};
+</update>
+<update id="updateRequestEngineerName" parameterType="map">
+	 	update request set  request_excute_engineerName=#{request_excute_engineerName} where request_id=#{request_id};
+</update>
+<update id="updateRequestRealStartTime" parameterType="map">
+	 	update request set request_real_startTime=#{request_real_startTime},request_status=#{request_status} where request_id=#{request_id};
+</update>
+<update id="updateRequestRealFinshTime" parameterType="map">
+	 	update request set request_real_finshTime=#{request_real_finshTime},request_status=#{request_status} where request_id=#{request_id};
+</update>
+<update id="updateRequestDate" parameterType="map">
+	 	update request set  request_start_time=#{request_start_time},request_finsh_time=#{request_finsh_time} where request_id=#{request_id};
+</update>
+<update id="updateRequestEngineerId" parameterType="map">
+	 	update request set  request_engineerId=#{request_engineerId} where request_id=#{request_id};
+</update>
+<update id="updateRequestByMannerConfrim" parameterType="map">
+	 	update request set  request_status=#{request_status},request_excute_engineerName=#{request_excute_engineerName},request_start_time=#{request_start_time},request_finsh_time=#{request_finsh_time},request_engineerId=#{request_engineerId} where request_id=#{request_id};
+</update>
+<!-- delete -->
+<delete id="deleteDraftRequest" parameterType="string">
+	delete from request where request_id=#{request_id}; 
+</delete>
+</mapper> 
