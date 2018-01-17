@@ -33,8 +33,8 @@ public class DingController {
 	@ResponseBody
 	public NoteResult testDingDing(){
 		System.out.println("DingDingTest-AccessToken");
-		String corpid="dingdda4cfb59500c8f635c2f4657eb6378f";
-		String corpsecret="S3BgsmqGuFv7-9_9Mr20Me59DcnVX9pH05HJGZDLavli6MiMq803onk6RBdXzU_f";
+		String corpid="";
+		String corpsecret=""
 		String accesstoken=DingUtil.getAccessToken(corpid, corpsecret);
 		NoteResult nr=new NoteResult();
 		nr.setData(accesstoken);
@@ -45,8 +45,8 @@ public class DingController {
 	@ResponseBody
 	public NoteResult testDingDingSsoToken(){
 		System.out.println("DingDingTest-SsoToken");
-		String corpid="dingdda4cfb59500c8f635c2f4657eb6378f";
-		String SSOSecret="VqjyRTwIpSsihXBbDg3fsCASoayXrVgn1Wlz84Oghyc_I8XGhHbAT-ZKVhHMQZPS";
+		String corpid="";
+		String SSOSecret="";
 		String sstoken=DingUtil.getSsoToken(corpid, SSOSecret);
 		NoteResult nr=new NoteResult();
 		nr.setData(sstoken);
@@ -57,8 +57,8 @@ public class DingController {
 	@ResponseBody
 	public synchronized  NoteResult testDingDingDeptList(HttpServletResponse res){
 		res.setHeader("Access-Control-Allow-Origin", "*");
-		String corpid="dingdda4cfb59500c8f635c2f4657eb6378f";
-		String corpsecret="S3BgsmqGuFv7-9_9Mr20Me59DcnVX9pH05HJGZDLavli6MiMq803onk6RBdXzU_f";
+		String corpid="";
+		String corpsecret="";
 		DingToken dt= dingTokenDao.findDingToken();
 		long dingTokenTimeMills=Long.parseLong(dt.getDingToken_time());
 		long timeStamp = System.currentTimeMillis();
@@ -90,8 +90,8 @@ public class DingController {
 	public NoteResult testDingDingDept(HttpServletResponse res){
 		res.setHeader("Access-Control-Allow-Origin", "*");
 		System.out.println("DingDingTest-deptList");
-		String corpid="dingdda4cfb59500c8f635c2f4657eb6378f";
-		String corpsecret="S3BgsmqGuFv7-9_9Mr20Me59DcnVX9pH05HJGZDLavli6MiMq803onk6RBdXzU_f";
+		String corpid="";
+		String corpsecret="";
 		String token=DingUtil.getAccessToken(corpid, corpsecret);
 		System.out.println("115:"+token);
 		List<Department>deptNameList=DingUtil.getdeptem(token);
@@ -101,9 +101,9 @@ public class DingController {
 		nr.setStatus(0);
 		return nr;
 	}
-	private String corpid="dingdda4cfb59500c8f635c2f4657eb6378f";
-	private String corpsecret="S3BgsmqGuFv7-9_9Mr20Me59DcnVX9pH05HJGZDLavli6MiMq803onk6RBdXzU_f";
-	private String url = "http://116.205.12.44:8011/Cases/nowTask_Ding_pc.html";
+	private String corpid="";
+	private String corpsecret="";
+	private String url = "";
 	private String nonceStr = "nonceStr";
 	//获取签名
 	@RequestMapping("/ding/getSignPC.do")
